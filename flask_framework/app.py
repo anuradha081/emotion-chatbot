@@ -7,7 +7,7 @@ import os
 app = Flask(__name__)
 
 
-file_id = "1-IBhusUoWsD96rcp96cW126GNw27CayN"      
+file_id = "1nVMoBCl1IUgjMoYnbtBGzQwe0Pv6sJxd"      
 url = f"https://drive.google.com/uc?id={file_id}"
 
 resp = requests.get(url)
