@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        #chatbox { width: 100%; max-width: 500px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+        .message { margin: 10px 0; }
+        .user { text-align: right; color: blue; }
+        .bot { text-align: left; color: green; }
+    </style>
+</head>
+<body>
+    <div id="chatbox">
+        <h2>Logic Flow Chatbot</h2>
+        <div id="chatlog"></div>
+        <input type="text" id="userInput" placeholder="Type your message..." onkeydown="if(event.key === 'Enter') sendMessage()" />
+    </div>
+
+    <script>
+        function sendMessage() {
+            let input = document.getElementById("userInput");
+            let message = input.value.trim();
+            if (!message) return;
+
+            appendMessage(message, "user");
+            input.value = "";
+
+            fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: message })
+            })
+            .then(res => res.json())
+            .then(data => appendMessage(data.response, "bot"));
+        }
+
+        function appendMessage(message, sender) {
+            const msgDiv = document.createElement("div");
+            msgDiv.className = `message ${sender}`;
+            msgDiv.innerText = message;
+            document.getElementById("chatlog").appendChild(msgDiv);
+        }
+    </script>
+</body>
+</html>
