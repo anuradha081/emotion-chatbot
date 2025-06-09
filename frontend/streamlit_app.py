@@ -18,7 +18,7 @@ if user_input:
 
     # Send to backend
     try:
-        response = requests.post("http://127.0.0.1:5000/chat", json={"message": user_input})
+        response = requests.post("http://localhost:8501", json={"message": user_input})
         reply = response.json()["response"]
     except:
         reply = "Backend not reachable. Please start Flask backend."
