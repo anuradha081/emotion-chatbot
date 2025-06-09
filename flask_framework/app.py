@@ -1,0 +1,27 @@
+from flask import Flask, render_template, request, jsonify
+import json
+import requests
+
+
+app = Flask(__name__)
+
+
+file_id = "1-IBhusUoWsD96rcp96cW126GNw27CayN"      
+url = f"https://drive.google.com/uc?id={file_id}"
+
+resp = requests.get(url)
+resp.raise_for_status()            # stop the app if the download fails
+dialog_data= json.loads(resp.text)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    user_message = request.json.get("message", "").strip().lower()
+    response = dialog_data.get(user_message, "Sorry, I didn't understand that.")
+    return jsonify({"response": response})
+
+if __name__ == "__main__":
+    app.run(debug=True)
