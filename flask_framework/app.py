@@ -2,12 +2,11 @@ from flask import Flask, render_template, request, jsonify
 import json
 import requests
 import os
-
-
+import re
 app = Flask(__name__)
 
 
-file_id = "1nVMoBCl1IUgjMoYnbtBGzQwe0Pv6sJxd"      
+file_id = "1ZS5_PxAZZe1TJeKVrVBgorlT70ycvc86"      
 url = f"https://drive.google.com/uc?id={file_id}"
 
 resp = requests.get(url)
@@ -20,7 +19,11 @@ def index():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    user_message = request.json.get("message", "").strip().lower()
+    user_message = request.json.get("message", "").lower()
+    def clean_input(text):
+        return re.sub(r'[^a-zA_Z]',"",text)
+    user_message = clean_input(user_message)
+    
     response = dialog_data.get(user_message, "Sorry, I didn't understand that.")
     return jsonify({"response": response})
 if __name__ == "__main__":
